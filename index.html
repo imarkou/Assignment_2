@@ -61,65 +61,69 @@
             globalData = data;
 
             console.log(globalData);
+
+
+            var xScale = d3.scale.linear()
+                .domain([0, d3.max(globalData, function (data) {
+                    return data.prostitution;
+                })])
+                .range([padding, chartWidth - padding]);
+
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(globalData, function (data) {
+                    return data.vehicleThefts;
+                })])
+                .range([chartHeight - padding, padding]);
+
+            const factor = 0.009;
+            const maxRadius = Math.sqrt(chartWidth * chartHeight * factor / Math.PI);
+            var rScale = d3.scale.linear()
+                .domain([0, d3.max(globalData, function (data) {
+                    return data.totalCrimes;
+                })])
+                .range([0, maxRadius]);
+            UpdateCircles();
+            UpdateLabels();
+
+            function UpdateCircles() {
+                var circles = svg.selectAll("circle.dataCircle")
+                    .data(globalData)
+                    .transition()
+                    .duration(1500)
+                    .attr("cx", function (data) {
+                        return xScale(data.prostitution);
+                    })
+                    .attr("cy", function (data) {
+                        return yScale(data.vehicleThefts);
+                    })
+                    .attr("r", function (data) {
+                        return rScale(data.totalCrimes);
+                    })
+                    .attr('opacity', 0.3);
+            }
+
+
+            function UpdateLabels() {
+                //Add  labels
+                svg.selectAll("text.label")
+                    .data(globalData)
+                    .transition()
+                    .duration(1500)
+                    .text(function (data) {
+                        return data.district;
+                    })
+                    .attr("x", function (data) {
+                        return xScale(data.prostitution);
+                    })
+                    .attr("y", function (data) {
+                        return yScale(data.vehicleThefts);
+                    })
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "10px")
+                    .attr("fill", "#483D8B")
+                    .attr('opacity', 1);
+            }
         });
-
-        var xScale = d3.scale.linear()
-            .domain([0, d3.max(globalData, function (data) {
-                return data.prostitution;
-            })])
-            .range([padding, chartWidth - padding]);
-
-        var yScale = d3.scale.linear()
-            .domain([0, d3.max(globalData, function (data) {
-                return data.vehicleThefts;
-            })])
-            .range([chartHeight - padding, padding]);
-
-        const factor = 0.009;
-        const maxRadius = Math.sqrt(chartWidth * chartHeight * factor / Math.PI);
-        var rScale = d3.scale.linear()
-            .domain([0, d3.max(globalData, function (data) {
-                return data.totalCrimes;
-            })])
-            .range([0, maxRadius]);
-        UpdateCircles();
-        UpdateLabels();
-
-        function UpdateCircles() {
-            var circles = svg.selectAll("circle.dataCircle")
-                .data(globalData)
-                .attr("cx", function (data) {
-                    return xScale(data.prostitution);
-                })
-                .attr("cy", function (data) {
-                    return yScale(data.vehicleThefts);
-                })
-                .attr("r", function (data) {
-                    return rScale(data.totalCrimes);
-                })
-                .attr('opacity', 0.3);
-        }
-
-
-        function UpdateLabels() {
-            //Add  labels
-            svg.selectAll("text.label")
-                .data(globalData)
-                .transition()
-                .text(function (data) {
-                    return data.district;
-                })
-                .attr("x", function (data) {
-                    return xScale(data.prostitution);
-                })
-                .attr("y", function (data) {
-                    return yScale(data.vehicleThefts);
-                })
-                .attr("font-family", "sans-serif")
-                .attr("font-size", "10px")
-                .attr("fill", "#483D8B")
-                .attr('opacity', 1);
-        }
     }
 
     var chartWidth = document.getElementById("mychart").clientWidth;
@@ -184,6 +188,7 @@
                     .attr("r", function (data) {
                         return rScale(data.totalCrimes);
                     })
+                    .attr("class", "dataCircle")
                     .attr('opacity', 0.3);
             }
 
@@ -205,6 +210,7 @@
                     .attr("font-family", "sans-serif")
                     .attr("font-size", "10px")
                     .attr("fill", "#483D8B")
+                    .attr("class", "label")
                     .attr('opacity', 1);
             }
 
