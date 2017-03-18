@@ -1,0 +1,11 @@
+[
+{"district": "SOUTHERN",  "totalCrimes": "25513", "vehicleThefts": "1421", "prostitution":"18"},
+{"district": "PARK",      "totalCrimes": "8178", "vehicleThefts":"1206", "prostitution":"2"},
+{"district": "BAYVIEW",   "totalCrimes":  "15630", "vehicleThefts":"2113", "prostitution":"11"},
+{"district": "CENTRAL",   "totalCrimes":  "13527","vehicleThefts": "1190", "prostitution":"69"},
+{"district": "INGLESIDE", "totalCrimes":  "13915", "vehicleThefts":"2309", "prostitution":"5"},
+{"district": "TARAVAL",   "totalCrimes": "11234", "vehicleThefts":"1657", "prostitution":"10"},
+{"district": "MISSION",    "totalCrimes": "21037", "vehicleThefts":"2056", "prostitution":"713"},
+{"district": "TENDERLOIN","totalCrimes":  "12682", "vehicleThefts": "371", "prostitution":"521"},
+{"district": "NORTHERN",    "totalCrimes":  "18870", "vehicleThefts":"1865", "prostitution":"581"},
+{"district": "RICHMOND",    "totalCrimes":  "7645","vehicleThefts": "1074","prostitution": "15"}]
