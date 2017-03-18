@@ -4,6 +4,18 @@
     <meta charset="utf-8">
     <title>D3: Week7</title>
     <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
     <!--<script type="text/javascript" src="Assignment2B.js"></script>-->
     <style type="text/css">
         #mychart {
@@ -13,22 +25,43 @@
     </style>
 </head>
 <body>
-<div class="kati">
-    <svg width="1000" height="800" id="mychart"></svg>
+<div class="kati container">
+    <div class="row">
+        <div class="col-md-12">
+            <svg width="100%" height="600" id="mychart"></svg>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary col-md-offset-3" onclick="buttonClickEvent('counts2003.json')">2003 Data
+            </button>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-info col-md-offset-3" onclick="buttonClickEvent('counts2015.txt')">2015 Data</button>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
-    (function () {
-        var w = 1000;
-        var h = 800;
-        const padding = 50;
 
-        //Create SVG element
-        var svg = d3.select("#mychart");
 
-        //Data
-        d3.json("counts2003.json", function (data) {
-            console.log(data);
+
+    function buttonClickEvent(filename) {
+        ReadFileAndUpdateChart(filename);
+    }
+
+    var chartWidth = document.getElementById("mychart").clientWidth;
+    var chartHeight = document.getElementById("mychart").clientHeight;
+    const padding = 50;
+
+    //Create SVG element
+    var svg = d3.select("#mychart");
+
+    var globalData;
+    //Data
+    function ReadFileAndUpdateChart(filename) {
+
+        d3.json(filename, function (data) {
 
             data.forEach(function (item) {
                 item.prostitution = parseInt(item.prostitution);
@@ -36,21 +69,24 @@
                 item.totalCrimes = parseInt(item.totalCrimes);
             });
 
+            globalData = data;
+
+            console.log(globalData);
+
             var xScale = d3.scale.linear()
                 .domain([0, d3.max(data, function (data) {
                     return data.prostitution;
                 })])
-                .range([padding, w-padding]);
+                .range([padding, chartWidth - padding]);
 
-
-            var myDomain = d3.scale.linear().domain([0, d3.max(data, function (data) {
-                return data.vehicleThefts;
-            })]);
-            var yScale = myDomain.range([h-padding, padding]);
-
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(data, function (data) {
+                    return data.vehicleThefts;
+                })])
+                .range([chartHeight - padding, padding]);
 
             const factor = 0.009;
-            const maxRadius = Math.sqrt(w*h*factor/Math.PI);
+            const maxRadius = Math.sqrt(chartWidth * chartHeight * factor / Math.PI);
             var rScale = d3.scale.linear()
                 .domain([0, d3.max(data, function (data) {
                     return data.totalCrimes;
@@ -58,83 +94,91 @@
                 .range([0, maxRadius]);
 
 
-            var circles = svg.selectAll("circle")
-                .data(data)
-                .enter()
-                .append("circle")
-                .attr("cx", function (data) {
-                    return xScale(data.prostitution);
-                })
-                .attr("cy", function (data) {
-                    return yScale(data.vehicleThefts);
-                })
-                .attr("r", function (data) {
-                    return rScale(data.totalCrimes);
-                })
-                .attr('opacity', 0.3);
+            DrawCircles();
+            AddLabels();
+            CreateAxes();
+
+            function DrawCircles() {
+                var circles = svg.selectAll("circle")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function (data) {
+                        return xScale(data.prostitution);
+                    })
+                    .attr("cy", function (data) {
+                        return yScale(data.vehicleThefts);
+                    })
+                    .attr("r", function (data) {
+                        return rScale(data.totalCrimes);
+                    })
+                    .attr('opacity', 0.3);
+            }
 
 
-            //Add  labels
-            var a = svg.selectAll("text.label");
-                var b = a.data(data);
-                var c = b.enter();
-                var d = c.append("text");
-                var e = d.text(function(data) {
-                    return data.district;
-                })
-                .attr("x", function(data) {
-                    return xScale(data.prostitution);
-                })
-                .attr("y", function(data) {
-                    return yScale(data.vehicleThefts);
-                })
-                .attr("font-family", "sans-serif")
-                .attr("font-size", "10px")
-                .attr("fill", "#483D8B")
-                .attr('opacity', 1)
+            function AddLabels() { //Add  labels
+                svg.selectAll("text.label").data(data)
+                    .enter()
+                    .append("text")
+                    .text(function (data) {
+                        return data.district;
+                    })
+                    .attr("x", function (data) {
+                        return xScale(data.prostitution);
+                    })
+                    .attr("y", function (data) {
+                        return yScale(data.vehicleThefts);
+                    })
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", "10px")
+                    .attr("fill", "#483D8B")
+                    .attr('opacity', 1);
+            }
 
-            //Define X axis
-            var xAxis = d3.svg.axis()
-                .scale(xScale)
-                .orient("bottom")
-                .ticks(12);
+            function CreateAxes() {
+                //Define X axis
+                var xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient("bottom")
+                    .ticks(12);
 
-            //Define Y axis
-            var yAxis = d3.svg.axis()
-                .scale(yScale)
-                .orient("left")
-                .ticks(8);
+                //Define Y axis
+                var yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left")
+                    .ticks(8);
 
-            //Create X axis
-            svg.append("g")
-                .attr("class", "axis")
-                .attr("transform", "translate(0," + (h - padding - 6) + ")")
-                .call(xAxis);
+                //Create X axis
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(0," + (chartHeight - padding - 6) + ")")
+                    .call(xAxis);
 
 
-            //Create Y axis
-            svg.append("g")
-                .attr("class", "axis")
-                .attr("transform", "translate(" + padding + ",0)")
-                .call(yAxis);
+                //Create Y axis
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(" + padding + ",0)")
+                    .call(yAxis);
 
-            //Add text
-            svg.append("text")
-                .attr("transform", "rotate(-90)")
-                .attr("y", 0 - padding + 15)
-                .attr("x", 0 - (h / 2))
-                .attr("dy", "4em")
-                .style("text-anchor", "middle")
-                .text("vehicle theft");
+                //Add text
+                svg.append("text")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 0 - padding + 15)
+                    .attr("x", 0 - (chartHeight / 2))
+                    .attr("dy", "4em")
+                    .style("text-anchor", "middle")
+                    .text("vehicle theft");
 
-            // Add the text label for the x axis
-            svg.append("text").attr("transform", "translate(" + (w / 2) + "," + (h - 15) + ")").style("text-anchor", "middle").text("prostitution");
-
+                // Add the text label for the x axis
+                svg.append("text").attr("transform", "translate(" + (chartWidth / 2) + "," + (chartHeight - 15) + ")").style("text-anchor", "middle").text("prostitution");
+            }
 
 
         });
+    }
 
-    })()
+    ReadFileAndUpdateChart("counts2015.txt");
 
 </script>
 </body>
