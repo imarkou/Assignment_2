@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Geodata Plotting</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var projection = d3.geo.mercator();
+    //global variables
+    var margin = {
+        top: 5
+        , right: 5
+        , bottom: 5
+        , left: 5
+    }
+        , width = 1000 - margin.left - margin.right
+        , height = 600 - margin.top - margin.bottom;
+
+    var lattop = 37.831575;
+    var lonleft = -122.514949;
+    var lonright = -120.906983;
+    // make the scale so that the difference of longitude is
+    // exactly the width of the image
+    var scale = 360 * width / (lonright - lonleft);
+    projection.scale(scale);
+    // translate the origin of the map to [0,0] as a start,
+    // not to the now meaningless default of [480,250]
+    projection.translate([0, 0]);
+    // check where your top left coordinate is projected
+    var trans = projection([lonleft, lattop]);
+    // translate your map in the negative direction of that result
+    projection.translate([-1 * trans[0], -1 * trans[1]]);
+    var path = d3.geo.path()
+        .projection(projection);
+    //Create SVG element
+    svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // define drawing groups
+    svg.append("g").attr("id", "map")
+    svg.append("g").attr("id", "nodes")
+    svg.append("g").attr("id", "centroids")
+    svg.append("g").attr("id", "districts")
+
+    // geojson data of SF
+    d3.json("sfpddistricts.geojson", function(json) {
+        svg.select("#map").selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .attr({
+                "d": path,
+                'fill': "steelblue",
+                'stroke-width': 1.5,
+                stroke: 'rgb(180,180,180)'
+            })
+            .on('mouseover', function() {
+                // Add a hover effect
+                d3.select(this)
+                    .transition()
+                    .attr('fill', 'rgb(180,180,180)')
+            })
+            .on('mouseout', function() {
+                // Remove the hover effect
+                d3.select(this).transition()
+                    .attr('fill', "steelblue")
+            })
+            .append('title')
+            // Add tool tip, containing districts
+            .text(function(data) {
+                return data.properties.DISTRICT;
+            });
+
+        // district label in center of coordinates
+        svg.select("#districts").selectAll("text")
+            .data(json.features)
+            .enter()
+            .append("svg:text")
+            .text(function(data) {
+                return d.properties.DISTRICT;
+            })
+            .attr("x", function(data) {
+                return path.centroid(data)[0];
+            })
+            .attr("y", function(data) {
+                return path.centroid(data)[1];
+            })
+            .attr("text-anchor", "middle")
+            .attr('font-size', '15px')
+            .attr('font-family', 'sans-serif')
+            .attr('fill', 'black');
+    });
+
+
+</script>
+
+</body>
+</html>

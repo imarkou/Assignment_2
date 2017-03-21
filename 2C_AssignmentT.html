@@ -78,6 +78,9 @@
                     })
                     .attr("fill", function (data) {
                         return "rgb(0, 0, " + parseInt(data.incidents / 7) + ")";
+                    })
+                    .on("click", function(data) {
+                        console.log(data);
                     });
             }
 
