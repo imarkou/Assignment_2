@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2B Part</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var chartWidth = 800;
+    var chartHeight = 600;
+    const padding = 50;
+    var margin = {
+        top: 20, right: 20, bottom: 50, left: 70
+    }
+
+    svg = d3.select("body")
+        .append("svg")
+        .attr("width", chartWidth)
+        .attr("height", chartHeight)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    var globalData;
+
+    //Data
+    function ReadFileAndUpdateChart(filename) {
+
+        d3.csv(filename, function (data) {
+            data.forEach(function (item) {
+                item.year = parseInt(item.year);
+                item.incidents = parseInt(item.incidents);
+            });
+
+            globalData = data;
+
+            console.log(globalData);
+
+            var len = globalData.length;
+            var rangel = d3.range(len);
+
+            var xScale = d3.scale.ordinal()
+                .domain(rangel)
+//                .domain(d3.range(globalData.length))
+                .rangeRoundBands([0, chartWidth], 0.1);
+
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(globalData, function(data) {
+                    return data.incidents;
+                })])
+                .range([chartHeight, 0]);
+
+
+
+            DrawHistogram();
+            CreateAxes();
+
+            function DrawHistogram() {
+
+                svg.selectAll(".bar")
+                    .data(globalData)
+                    .enter()
+                    .append("rect")
+                    .attr("class", "bar")
+                    .attr("x", function (data, iterator) {
+                        var a = xScale(iterator);
+                        return a;
+                    })
+                    .attr("width", xScale.rangeBand())
+                    .attr("y", function (data) {
+                        return yScale(data.incidents);
+                    })
+                    .attr("height", function (data) {
+                        return chartHeight - yScale(data.incidents);
+                    })
+                    .attr("fill", function (data) {
+                        return "rgb(0, 0, " + parseInt(data.incidents / 7) + ")";
+                    });
+            }
+
+
+            function CreateAxes() {
+                xAxis_hist = d3.svg.axis()
+                    .scale(xScale)
+                    .orient("bottom");
+                yAxis_hist = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left")
+                    .ticks(10);
+            }
+
+            svg.selectAll("text")
+                .data(globalData)
+                .enter()
+                .append("text")
+                .text(function(data) {
+                    return data.incidents;
+                })
+                .attr("text-anchor", "middle")
+                .attr("x", function(d, i) {
+                    return i * (chartWidth / globalData.length) + (chartWidth / globalData.length - padding) / 2 + 20;
+                })
+                .attr("y", function(d) {
+                    return 15 + yScale(d.incidents);
+                })
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "11px")
+                .attr("fill", "white");
+
+
+
+        });
+    }
+
+    ReadFileAndUpdateChart("prostitution_summary.csv");
+
+
+
+
+</script>
+
+
+</body>
+</html>
