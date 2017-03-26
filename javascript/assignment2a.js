@@ -50,7 +50,7 @@ function Assignment_2A() {
                 UpdateLabels();
 
                 function UpdateCircles() {
-                    var circles = svg.selectAll("circle.dataCircle")
+                    svg.selectAll("circle.dataCircle")
                         .data(globalData)
                         .transition()
                         .duration(1500)
@@ -89,7 +89,7 @@ function Assignment_2A() {
                 }
             });
         }
-    }
+    };
 
     var chartWidth = document.getElementById("assignment2ASVG").clientWidth;
     var chartHeight = document.getElementById("assignment2ASVG").clientHeight;
@@ -141,7 +141,7 @@ function Assignment_2A() {
             CreateAxes();
 
             function DrawCircles() {
-                var circles = svg.selectAll("circle.dataCircle")
+                svg.selectAll("circle.dataCircle")
                     .data(globalData)
                     .enter()
                     .append("circle")
@@ -223,7 +223,7 @@ function Assignment_2A() {
         });
     }
 
-    ReadFileAndUpdateChart("/10/data/counts2003.json");
+    ReadFileAndUpdateChart("/data/counts2003.json");
 
     return returnedObject;
 
@@ -231,5 +231,5 @@ function Assignment_2A() {
 
 
 var assignment2AObject = Assignment_2A();
-//assignment2AObject.buttonClickEvent("/10/data/counts2003.json");
+//assignment2AObject.buttonClickEvent("/data/counts2003.json");
 console.log(assignment2AObject);

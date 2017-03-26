@@ -49,7 +49,7 @@ function Assignment_2B() {
     svg.append("g").attr("id", "districts");
 
     // geojson data of SF
-    d3.json("/10/data/sfpddistricts.geojson", function (json) {
+    d3.json("/data/sfpddistricts.geojson", function (json) {
 
         svg.selectAll("path")
             .data(json.features)
@@ -99,7 +99,7 @@ function Assignment_2B() {
     var buttons = document.getElementsByClassName("button1");
     var buttonsCount = buttons.length;
 
-    d3.json("/10/data/prost_pointssosto.json", function (data) {
+    d3.json("/data/prost_pointssosto.json", function (data) {
 
         svg.selectAll("circles")
             .data(data)
@@ -140,7 +140,7 @@ function Assignment_2B() {
     });
 
     function hoverover() {
-        d3.json("/10/data/prost_pointssosto.json", function (data) {
+        d3.json("/data/prost_pointssosto.json", function (data) {
 
             d3.select("#K3")
                 .on("mouseover", function () {
@@ -226,7 +226,7 @@ function Assignment_2B() {
 
     function centClust(current_clicked) {
 
-        d3.json("/10/data/clusterCenterssosto.json", function (data) {
+        d3.json("/data/clusterCenterssosto.json", function (data) {
             // if (data[2]==current_clicked)
 
             svg.selectAll("#centers").remove();
