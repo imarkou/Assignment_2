@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>D3: Week7</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
+          <!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+
+    <!--&lt;!&ndash; Optional theme &ndash;&gt;-->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"-->
+          <!--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+
+    <!--&lt;!&ndash; Latest compiled and minified JavaScript &ndash;&gt;-->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"-->
+            <!--integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"-->
+            <!--crossorigin="anonymous"></script>-->
+    <!--&lt;!&ndash;<script type="text/javascript" src="Assignment2b.js"></script>&ndash;&gt;-->
+    <style type="text/css">
+        #mychart {
+            background-color: white;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<!--<div class="kati container">-->
+    <!--<div class= "row">-->
+        <!--<div class="col-md-12">-->
+            <!--<h1 id="dataHeader">Data 2015</h1>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<svg width="100%" height="600" id="mychart"></svg>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-6">-->
+            <!--<button type="button" class="btn btn-primary col-md-offset-3" onclick="buttonClickEvent('counts2003.json')">2003 Data-->
+            <!--</button>-->
+        <!--</div>-->
+        <!--<div class="col-md-6">-->
+            <!--<button type="button" class="btn btn-info col-md-offset-3" onclick="buttonClickEvent('counts2015.json')">2015 Data</button>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<script type="text/javascript">
+
+
+
+//    function buttonClickEvent(filename) {
+//        //ReadFileAndUpdateChart(filename);
+//        if (filename === 'counts2015.json') {
+//            d3.select("#dataHeader").text("Data 2015");
+//        }
+//        else{
+//            d3.select("#dataHeader").text("Data 2003");
+//        }
+//
+//
+//        d3.json(filename, function (data) {
+//
+//            data.forEach(function (item) {
+//                item.prostitution = parseInt(item.prostitution);
+//                item.vehicleThefts = parseInt(item.vehicleThefts);
+//                item.totalCrimes = parseInt(item.totalCrimes);
+//            });
+//
+//            globalData = data;
+//
+//            console.log(globalData);
+//
+//
+//            var xScale = d3.scale.linear()
+//                .domain([0, d3.max(globalData, function (data) {
+//                    return data.prostitution;
+//                })])
+//                .range([padding, chartWidth - padding]);
+//
+//            var yScale = d3.scale.linear()
+//                .domain([0, d3.max(globalData, function (data) {
+//                    return data.vehicleThefts;
+//                })])
+//                .range([chartHeight - padding, padding]);
+//
+//            const factor = 0.009;
+//            const maxRadius = Math.sqrt(chartWidth * chartHeight * factor / Math.PI);
+//            var rScale = d3.scale.linear()
+//                .domain([0, d3.max(globalData, function (data) {
+//                    return data.totalCrimes;
+//                })])
+//                .range([0, maxRadius]);
+//            UpdateCircles();
+//            UpdateLabels();
+//
+//            function UpdateCircles() {
+//                var circles = svg.selectAll("circle.dataCircle")
+//                    .data(globalData)
+//                    .transition()
+//                    .duration(1500)
+//                    .attr("cx", function (data) {
+//                        return xScale(data.prostitution);
+//                    })
+//                    .attr("cy", function (data) {
+//                        return yScale(data.vehicleThefts);
+//                    })
+//                    .attr("r", function (data) {
+//                        return rScale(data.totalCrimes);
+//                    })
+//                    .attr('opacity', 0.3);
+//            }
+//
+//
+//            function UpdateLabels() {
+//                //Add  labels
+//                svg.selectAll("text.label")
+//                    .data(globalData)
+//                    .transition()
+//                    .duration(1500)
+//                    .text(function (data) {
+//                        return data.district;
+//                    })
+//                    .attr("x", function (data) {
+//                        return xScale(data.prostitution);
+//                    })
+//                    .attr("y", function (data) {
+//                        return yScale(data.vehicleThefts);
+//                    })
+//                    .attr("font-family", "sans-serif")
+//                    .attr("font-size", "10px")
+//                    .attr("fill", "#483D8B")
+//                    .attr('opacity', 1);
+//            }
+//        });
+//    }
+
+    var chartWidth = document.getElementById("mychart").clientWidth;
+    var chartHeight = document.getElementById("mychart").clientHeight;
+    const padding = 50;
+
+    //Create SVG element
+    var svg = d3.select("#mychart");
+
+    var globalData;
+
+    //Data
+    function ReadFileAndUpdateChart(filename) {
+
+        d3.csv(filename, function (data) {
+
+            data.forEach(function (item) {
+                item.year = parseInt(item.year);
+                item.incidents = parseInt(item.incidents);
+            });
+
+            globalData = data;
+
+            console.log(globalData);
+
+            var xScale = d3.scale.ordinal()
+                .domain(globalData.map(function(data) {
+                    return data.year;
+                }));
+                .rangeRoundBands([0, chartWidth], .1);
+
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(globalData, function(data) {
+                    return data.incidents;
+                })]);
+                .range([chartHeight, 0]);
+
+
+            DrawHistogram();
+            AddLabels();
+            CreateAxes();
+
+            function DrawHistogram() {
+
+                    svg.selectAll(".bar")
+                        .data(globalData)
+                        .enter()
+                        .append("rect")
+                        .attr("class", "bar")
+                        .attr("x", function (data) {
+                            return xScale(data.year);
+                        })
+                        .attr("width", xScale.rangeBand())
+                        .attr("y", function (data) {
+                            return yScale(data.incidents);
+                        })
+                        .attr("height", function (data) {
+                            return chartHeight - yScale(data.incidents);
+                        })
+                        .attr("fill", function (data) {
+                            return "rgb(0, 0, " + parseInt(data.incidents / 7) + ")";
+                        });
+                }
+
+
+
+        });
+    }
+
+    ReadFileAndUpdateChart("prostitution_summary.csv");
+
+</script>
+</body>
+
+
+</html>
