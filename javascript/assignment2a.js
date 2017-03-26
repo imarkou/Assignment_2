@@ -223,7 +223,7 @@ function Assignment_2A() {
         });
     }
 
-    ReadFileAndUpdateChart("/data/counts2003.json");
+    ReadFileAndUpdateChart("./data/counts2003.json");
 
     return returnedObject;
 
