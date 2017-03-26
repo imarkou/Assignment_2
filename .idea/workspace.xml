@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="6e969ec8-17ba-455c-93f7-1a1e6413e28f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/javascript/Assignment2b.js" afterPath="$PROJECT_DIR$/javascript/Assignment2b.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/javascript/assignment2a.js" afterPath="$PROJECT_DIR$/javascript/assignment2a.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -30,8 +32,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1075">
-              <caret line="5" column="31" lean-forward="true" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+            <state relative-caret-position="105">
+              <caret line="79" column="74" lean-forward="false" selection-start-line="79" selection-start-column="74" selection-end-line="79" selection-end-column="74" />
               <folding>
                 <element signature="n#i#0;n#p#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
                 <element signature="n#b#0;n#p#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
@@ -40,23 +42,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Assignment2b.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Assignment2b.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/javascript/Assignment2b.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="231" column="47" lean-forward="false" selection-start-line="231" selection-start-column="47" selection-end-line="231" selection-end-column="47" />
-              <folding>
-                <element signature="e#4320#7510#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="195">
+              <caret line="146" column="33" lean-forward="true" selection-start-line="146" selection-start-column="33" selection-end-line="146" selection-end-column="33" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="assignment2a.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="assignment2a.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javascript/assignment2a.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="225" column="51" lean-forward="true" selection-start-line="225" selection-start-column="51" selection-end-line="225" selection-end-column="51" />
+            <state relative-caret-position="400">
+              <caret line="233" column="0" lean-forward="false" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc;n#Assignment_2A#0" expanded="false" />
                 <element signature="e#98#3373#0" expanded="false" />
@@ -83,9 +83,11 @@
       <find>rip</find>
       <find>assignment2a</find>
       <find>assignment2asv</find>
+      <find>/data/</find>
       <find>/10/</find>
     </findStrings>
     <replaceStrings>
+      <replace>data/</replace>
       <replace>/</replace>
     </replaceStrings>
   </component>
@@ -108,9 +110,9 @@
         <option value="$PROJECT_DIR$/assignment2a.js" />
         <option value="$PROJECT_DIR$/Assignment2B.js" />
         <option value="$PROJECT_DIR$/Deliverable.html" />
-        <option value="$PROJECT_DIR$/javascript/Assignment2b.js" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/javascript/assignment2a.js" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/javascript/Assignment2b.js" />
       </list>
     </option>
   </component>
@@ -311,7 +313,7 @@
       <workItem from="1490468471560" duration="4306000" />
       <workItem from="1490551105099" duration="59000" />
       <workItem from="1490551496777" duration="6046000" />
-      <workItem from="1490565706434" duration="6458000" />
+      <workItem from="1490565706434" duration="6549000" />
     </task>
     <task id="LOCAL-00001" summary="Added gitignore, added buttons, bootstrap">
       <created>1489857942009</created>
@@ -418,11 +420,18 @@
       <option name="project" value="LOCAL" />
       <updated>1490572432304</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="wrong filepath for data">
+      <created>1490572514815</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1490572514815</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52282000" />
+    <option name="totallyTimeSpent" value="52373000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -817,10 +826,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/javascript/assignment2a.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="233" column="0" lean-forward="false" selection-start-line="233" selection-start-column="0" selection-end-line="233" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc;n#Assignment_2A#0" expanded="false" />
+            <element signature="e#98#3373#0" expanded="false" />
+            <element signature="n#!!block;n#ReadFileAndUpdateChart#0;n#!!block;n#Assignment_2A#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1075">
-          <caret line="5" column="31" lean-forward="true" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+        <state relative-caret-position="105">
+          <caret line="79" column="74" lean-forward="false" selection-start-line="79" selection-start-column="74" selection-end-line="79" selection-end-column="74" />
           <folding>
             <element signature="n#i#0;n#p#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
             <element signature="n#b#0;n#p#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="false" />
@@ -830,23 +851,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/javascript/Assignment2b.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="231" column="47" lean-forward="false" selection-start-line="231" selection-start-column="47" selection-end-line="231" selection-end-column="47" />
-          <folding>
-            <element signature="e#4320#7510#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/javascript/assignment2a.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="225" column="51" lean-forward="true" selection-start-line="225" selection-start-column="51" selection-end-line="225" selection-end-column="51" />
-          <folding>
-            <element signature="n#!!doc;n#Assignment_2A#0" expanded="false" />
-            <element signature="e#98#3373#0" expanded="false" />
-            <element signature="n#!!block;n#ReadFileAndUpdateChart#0;n#!!block;n#Assignment_2A#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="195">
+          <caret line="146" column="33" lean-forward="true" selection-start-line="146" selection-start-column="33" selection-end-line="146" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -231,5 +231,4 @@ function Assignment_2A() {
 
 
 var assignment2AObject = Assignment_2A();
-//assignment2AObject.buttonClickEvent("/data/counts2003.json");
 console.log(assignment2AObject);
