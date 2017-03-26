@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<img src="https://gist.github.com/karmadude/5820393/raw/08438eb37a3a4b72ce3c6533f0f4e19751ded723/sfcontour.png" width="960" height="968">
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+    d3.select(self.frameElement.parentElement)
+        .style('background', '#6832b3')
+        .style('background', '-moz-radial-gradient(center, ellipse cover,  #6832b3 0%, #361370 100%)')
+        .style('background', '-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#6832b3), color-stop(100%,#361370))')
+        .style('background', '-webkit-radial-gradient(center, ellipse cover,  #6832b3 0%,#361370 100%)');
+    d3.select(self.frameElement.parentElement).select("h1")
+        .style('color', "#2B174B");
+    d3.select(self.frameElement)
+        .style("height", "900px")
+        .style("border", "none");
+
+</script>

@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assignment 2</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#accordion").accordion();
+        });
+
+
+        function Assignment_2A() {
+
+            var returnedObject = {
+                buttonClickEvent: function (filename) {
+                    //ReadFileAndUpdateChart(filename);
+                    if (filename === 'counts2015.txt') {
+                        d3.select("#dataHeader").text("Data 2015");
+                    }
+                    else {
+                        d3.select("#dataHeader").text("Data 2003");
+                    }
+
+
+                    d3.json(filename, function (data) {
+
+                        data.forEach(function (item) {
+                            item.prostitution = parseInt(item.prostitution);
+                            item.vehicleThefts = parseInt(item.vehicleThefts);
+                            item.totalCrimes = parseInt(item.totalCrimes);
+                        });
+
+                        globalData = data;
+
+                        console.log(globalData);
+
+
+                        var xScale = d3.scale.linear()
+                            .domain([0, d3.max(globalData, function (data) {
+                                return data.prostitution;
+                            })])
+                            .range([padding, chartWidth - padding]);
+
+                        var yScale = d3.scale.linear()
+                            .domain([0, d3.max(globalData, function (data) {
+                                return data.vehicleThefts;
+                            })])
+                            .range([chartHeight - padding, padding]);
+
+                        const factor = 0.009;
+                        const maxRadius = Math.sqrt(chartWidth * chartHeight * factor / Math.PI);
+                        var rScale = d3.scale.linear()
+                            .domain([0, d3.max(globalData, function (data) {
+                                return data.totalCrimes;
+                            })])
+                            .range([0, maxRadius]);
+                        UpdateCircles();
+                        UpdateLabels();
+
+                        function UpdateCircles() {
+                            var circles = svg.selectAll("circle.dataCircle")
+                                .data(globalData)
+                                .transition()
+                                .duration(1500)
+                                .attr("cx", function (data) {
+                                    return xScale(data.prostitution);
+                                })
+                                .attr("cy", function (data) {
+                                    return yScale(data.vehicleThefts);
+                                })
+                                .attr("r", function (data) {
+                                    return rScale(data.totalCrimes);
+                                })
+                                .attr('opacity', 0.3);
+                        }
+
+
+                        function UpdateLabels() {
+                            //Add  labels
+                            svg.selectAll("text.label")
+                                .data(globalData)
+                                .transition()
+                                .duration(1500)
+                                .text(function (data) {
+                                    return data.district;
+                                })
+                                .attr("x", function (data) {
+                                    return xScale(data.prostitution);
+                                })
+                                .attr("y", function (data) {
+                                    return yScale(data.vehicleThefts);
+                                })
+                                .attr("font-family", "sans-serif")
+                                .attr("font-size", "10px")
+                                .attr("fill", "#483D8B")
+                                .attr('opacity', 1);
+                        }
+                    });
+                }
+            }
+
+            var chartWidth = document.getElementById("assignment2ASVG").clientWidth;
+            var chartHeight = document.getElementById("assignment2ASVG").clientHeight;
+            const padding = 50;
+
+            //Create SVG element
+            var svg = d3.select("#assignment2ASVG");
+
+            var globalData;
+
+            //Data
+            function ReadFileAndUpdateChart(filename) {
+
+                d3.json(filename, function (data) {
+
+                    data.forEach(function (item) {
+                        item.prostitution = parseInt(item.prostitution);
+                        item.vehicleThefts = parseInt(item.vehicleThefts);
+                        item.totalCrimes = parseInt(item.totalCrimes);
+                    });
+
+                    globalData = data;
+
+                    console.log(globalData);
+
+                    var xScale = d3.scale.linear()
+                        .domain([0, d3.max(data, function (data) {
+                            return data.prostitution;
+                        })])
+                        .range([padding, chartWidth - padding]);
+
+                    var yScale = d3.scale.linear()
+                        .domain([0, d3.max(data, function (data) {
+                            return data.vehicleThefts;
+                        })])
+                        .range([chartHeight - padding, padding]);
+
+                    const factor = 0.009;
+                    const maxRadius = Math.sqrt(chartWidth * chartHeight * factor / Math.PI);
+                    var rScale = d3.scale.linear()
+                        .domain([0, d3.max(data, function (data) {
+                            return data.totalCrimes;
+                        })])
+                        .range([0, maxRadius]);
+
+
+                    DrawCircles();
+                    AddLabels();
+                    CreateAxes();
+
+                    function DrawCircles() {
+                        var circles = svg.selectAll("circle.dataCircle")
+                            .data(globalData)
+                            .enter()
+                            .append("circle")
+                            .attr("cx", function (data) {
+                                return xScale(data.prostitution);
+                            })
+                            .attr("cy", function (data) {
+                                return yScale(data.vehicleThefts);
+                            })
+                            .attr("r", function (data) {
+                                return rScale(data.totalCrimes);
+                            })
+                            .attr("class", "dataCircle")
+                            .attr('opacity', 0.3);
+                    }
+
+
+                    function AddLabels() { //Add  labels
+                        svg.selectAll("text.label")
+                            .data(globalData)
+                            .enter()
+                            .append("text")
+                            .text(function (data) {
+                                return data.district;
+                            })
+                            .attr("x", function (data) {
+                                return xScale(data.prostitution);
+                            })
+                            .attr("y", function (data) {
+                                return yScale(data.vehicleThefts);
+                            })
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "10px")
+                            .attr("fill", "#483D8B")
+                            .attr("class", "label")
+                            .attr('opacity', 1);
+                    }
+
+                    function CreateAxes() {
+                        //Define X axis
+                        var xAxis = d3.svg.axis()
+                            .scale(xScale)
+                            .orient("bottom")
+                            .ticks(10);
+
+                        //Define Y axis
+                        var yAxis = d3.svg.axis()
+                            .scale(yScale)
+                            .orient("left")
+                            .ticks(10);
+
+                        //Create X axis
+                        svg.append("g")
+                            .attr("class", "axis")
+                            .attr("transform", "translate(0," + (chartHeight - padding - 6) + ")")
+                            .call(xAxis);
+
+
+                        //Create Y axis
+                        svg.append("g")
+                            .attr("class", "axis")
+                            .attr("transform", "translate(" + padding + ",0)")
+                            .call(yAxis);
+
+                        //Add text
+                        svg.append("text")
+                            .attr("transform", "rotate(-90)")
+                            .attr("y", 0 - padding + 15)
+                            .attr("x", 0 - (chartHeight / 2))
+                            .attr("dy", "3em")
+                            .style("text-anchor", "middle")
+                            .text("Vehicle-Theft Crimes");
+
+                        // Add the text label for the x axis
+                        svg.append("text")
+                            .attr("transform", "translate(" + (chartWidth / 2) + "," + (chartHeight - 15) + ")").style("text-anchor", "middle")
+                            .text("Prostitution Crimes");
+                    }
+                });
+            }
+
+            ReadFileAndUpdateChart("counts2003.json");
+
+            return returnedObject;
+
+        }
+
+    </script>
+
+    <script type="text/javascript">
+
+        function Assignment_2B() {
+
+            var color_list = ['DarkRed', 'gold', 'PaleVioletRed', 'DarkOrange', 'DarkGreen', 'MidnightBlue'];
+
+
+            var projection = d3.geo.mercator();
+            var path = d3.geo.path()
+                .projection(projection);
+            var current_clicked = 2;
+            var border = 2;
+            var bordercolor = 'black';
+            var margin = {
+                top: 50
+                , right: 5
+                , bottom: 5
+                , left: 50
+            }
+                , width = 1000 - margin.left - margin.right
+                , height = 600 - margin.top - margin.bottom
+
+            var lattop = 37.831575;
+            var lonleft = -122.514949;
+            var lonright = -120.906983;
+
+            var scale = 360 * width / (lonright - lonleft);
+            projection.scale(scale);
+
+            projection.translate([0, 0]);
+            // check where your top left coordinate is projected
+            var trans = projection([lonleft, lattop]);
+            // translate your map in the negative direction of that result
+            projection.translate([-1 * trans[0], -1 * trans[1]]);
+            var path = d3.geo.path()
+                .projection(projection);
+
+
+//            Create SVG element
+            svg = d3.select("body")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            svg.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("height", height)
+                .attr("width", width)
+                .style("stroke", bordercolor)
+                .style("fill", "PaleTurquoise")
+                .style("stroke-width", border);
+
+
+            svg.append("g").attr("id", "districts")
+
+            // geojson data of SF
+            d3.json("sfpddistricts.geojson", function (json) {
+
+
+                svg.selectAll("path")
+                    .data(json.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", path)
+                    .attr({
+                        "d": path,
+                        'fill': "PeachPuff",
+                        'opacity': 0.6,
+                        'stroke-width': 1.5,
+                        'stroke': 'black'
+                    })
+                    .on('mouseover', function () {
+                        // Add a hover effect
+                        d3.select(this)
+                            .transition()
+                            .attr('fill', 'Coral')
+                    })
+                    .on('mouseout', function () {
+                        // Remove the hover effect
+                        d3.select(this).transition()
+                            .attr('fill', "PeachPuff")
+                    })
+                    .append('title')
+                    // Add tool tip, containing districts
+                    .text(function (data) {
+                        return data.properties.DISTRICT;
+                    });
+
+                // district label in center of coordinates
+                svg.select("#districts").selectAll("text")
+                    .data(json.features)
+                    .enter()
+                    .append("svg:text")
+                    // .text(function(d) {
+                    //     return d.properties.DISTRICT;
+                    // })
+                    .attr("x", function (data) {
+                        return path.centroid(data)[0];
+                    })
+                    .attr("y", function (data) {
+                        return path.centroid(data)[1];
+                    })
+                    .attr("text-anchor", "middle")
+                    .attr('font-size', '15px')
+                    .attr('font-family', 'sans-serif')
+                    .attr('fill', 'black');
+            });
+            var buttons = document.getElementsByClassName("button1");
+            var buttonsCount = buttons.length;
+            //var centClustData;
+
+
+            d3.json("prost_pointssosto.json", function (data) {
+
+                svg.selectAll("circles")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr("id", "points")
+                    .attr("cx", function (d) {
+                        return projection(d)[0];
+                    })
+                    .attr("cy", function (d) {
+                        return projection(d)[1];
+                    })
+                    .attr("r", 5)
+                    .style("fill", function (d) {
+                            return color_list[parseInt(d[2])];//K = 6
+                        }
+                    )
+
+                centClust(2);
+
+                for (var i = 0; i < buttonsCount; i += 1)
+                    buttons[i].onclick = clicked(i + 2);
+
+
+                function clicked(i) {
+                    // alert(i);
+                    d3.select("#K" + i)
+
+                        .on("click", function () {
+                            current_clicked = i;
+                            centClust(current_clicked);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[i])];
+
+
+                                })
+
+
+                        });
+
+
+                }
+            });
+
+
+            function hoverover() {
+                d3.json("prost_pointssosto.json", function (data) {
+
+
+                    d3.select("#K3")
+                        .on("mouseover", function () {
+                            centClust(3);
+
+                            svg.selectAll("#points")
+
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[3])];
+
+
+                                })
+                        })
+                        .on("mouseout", function () {
+                            centClust(current_clicked);
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[current_clicked])];
+
+
+                                })
+
+
+                        })
+
+
+                    d3.select("#K2")
+                        .on("mouseover", function () {
+                            centClust(2);
+                            svg.selectAll("#points")
+
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[2])];
+
+                                })
+                        })
+                        .on("mouseout", function () {
+                            centClust(current_clicked);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[current_clicked])];
+
+
+                                })
+
+
+                        })
+
+                    d3.select("#K4")
+                        .on("mouseover", function () {
+                            centClust(4);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[4])];
+
+                                })
+                        })
+                        .on("mouseout", function () {
+                            centClust(current_clicked);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[current_clicked])];
+
+
+                                })
+
+
+                        })
+
+
+                    d3.select("#K5")
+                        .on("mouseover", function () {
+                            centClust(5);
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[5])];
+
+                                })
+                        })
+                        .on("mouseout", function () {
+                            centClust(current_clicked);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[current_clicked])];
+
+
+                                })
+
+
+                        })
+
+                    d3.select("#K6")
+                        .on("mouseover", function () {
+                            centClust(6);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[6])];
+
+                                })
+                        })
+                        .on("mouseout", function () {
+                            centClust(current_clicked);
+
+                            svg.selectAll("#points")
+
+                                .style("fill", function (d) {
+
+                                    return color_list[parseInt(d[current_clicked])];
+
+
+                                })
+
+
+                        })
+                })
+            }
+            ;
+
+            function centClust(current_clicked) {
+
+                d3.json("clusterCenterssosto.json", function (data) {
+                    // if (data[2]==current_clicked)
+
+                    svg.selectAll("#centers").remove();
+                    svg.selectAll("clust")
+
+                        .data(data)
+                        .enter()
+                        .append("circle")
+                        .attr("id", "centers")
+                        .attr("cx", function (d) {
+                            return projection(d)[0];
+                        })
+                        .attr("cy", function (d) {
+                            return projection(d)[1];
+                        })
+                        .attr("r", 7)
+                        .attr("fill", 'none')
+                        .style('stroke', 'black')
+                        .style('stroke-width', function (d) {
+                            if (d[2] == current_clicked) {
+                                return 5;
+                            }
+                            else {
+                                return 0;
+                            }
+                        })
+
+
+                });
+
+
+            }
+
+
+        }
+
+    </script>
+</head>
+<body>
+
+<h1>Assignment 2</h1>
+
+<p>For the DTU course: <a href="http://www.kurser.dtu.dk/02806.aspx?menulanguage=en-gb">02806 Social data analysis and
+    visualization</a>.</p>
+<p>The presentation of the assignment is organised in expandable sections with <a
+        href="https://jqueryui.com/accordion/">jQuery accordion</a>.</p>
+
+
+<div id="accordion">
+    <h2>2A: One scatter plot and two datasets</h2>
+
+    <div>
+
+        <h3>Questionnaire</h3>
+        <p><i> Explain in your own words why you think I want the axes to be the same for both years?
+            (Even though you know how to make axes adapt to the data values) </i></p>
+
+        <p><b>When the axes are fixed, the transition from the first visualization
+            to the next one helps the reader understand the crime rate changes.
+            The reader can easily see the reduction or increase of each crime category occurrence between 2003 and 2015
+            without having to read any more information. This way it is also understood how important correct
+            visualizations
+            are in such studies. </b></p>
+        <h3>Visualizations</h3>
+
+        <p>Click a button to select a year.</p>
+
+        <div class="kati container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 id="dataHeader">Data 2015</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <svg width="100%" height="600" id="assignment2ASVG"></svg>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary col-md-offset-3"
+                            onclick="assignment2AObject.buttonClickEvent('counts2003.json')">2003 Data
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-info col-md-offset-3"
+                            onclick="assignment2AObject.buttonClickEvent('counts2015.json')">2015 Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            var assignment2AObject = Assignment_2A();
+            assignment2AObject.buttonClickEvent("counts2003.json");
+            console.log(assignment2AObject);
+        </script>
+
+
+    </div>
+    <h2>2B: Visualizing geodata</h2>
+    <div>
+        <p>For the final sub-assignment we will visualize our results from the K-means exercise from week 5.
+            The <a href="http://nbviewer.jupyter.org/gist/GiannisKav/5cae0a8bbc0c26bed2532307b2047353">code to extract
+                data</a> is documented in a iPython notebook.</p>
+
+        <p>Mouseover a button to see the corresponding number of cluster centers (<b>K</b>).</p>
+
+        <button id="K2" class="button1" onmouseover="hoverover()">K=2</button>
+        <button id="K3" class="button1" onmouseover="hoverover()">K=3</button>
+        <button id="K4" class="button1" onmouseover="hoverover()">K=4</button>
+        <button id="K5" class="button1" onmouseover="hoverover()">K=5</button>
+        <button id="K6" class="button1" onmouseover="hoverover()">K=6</button>
+
+        <script type="text/javascript">
+
+            Assignment_2B();
+
+        </script>
+
+        <svg id="assignment2BSVG"></svg>
+    </div>
+</div>
+
+</body>
+</html>

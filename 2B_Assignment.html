@@ -231,13 +231,13 @@
                 var xAxis = d3.svg.axis()
                     .scale(xScale)
                     .orient("bottom")
-                    .ticks(12);
+                    .ticks(10);
 
                 //Define Y axis
                 var yAxis = d3.svg.axis()
                     .scale(yScale)
                     .orient("left")
-                    .ticks(8);
+                    .ticks(10);
 
                 //Create X axis
                 svg.append("g")
@@ -257,19 +257,19 @@
                     .attr("transform", "rotate(-90)")
                     .attr("y", 0 - padding + 15)
                     .attr("x", 0 - (chartHeight / 2))
-                    .attr("dy", "4em")
+                    .attr("dy", "3em")
                     .style("text-anchor", "middle")
-                    .text("vehicle theft");
+                    .text("Vehicle-Theft Crimes");
 
                 // Add the text label for the x axis
                 svg.append("text")
                     .attr("transform", "translate(" + (chartWidth / 2) + "," + (chartHeight - 15) + ")").style("text-anchor", "middle")
-                    .text("prostitution");
+                    .text("Prostitution Crimes");
             }
         });
     }
 
-    ReadFileAndUpdateChart("counts2015.txt");
+    ReadFileAndUpdateChart("counts2003.json");
 
 </script>
 </body>
