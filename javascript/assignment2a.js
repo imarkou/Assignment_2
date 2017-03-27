@@ -3,7 +3,7 @@ function Assignment_2A() {
     var returnedObject = {
         buttonClickEvent: function (filename) {
             //ReadFileAndUpdateChart(filename);
-            if (filename === 'counts2015.txt') {
+            if (filename === 'data/counts2015.json') {
                 d3.select("#dataHeader").text("Data 2015");
             }
             else {
