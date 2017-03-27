@@ -258,7 +258,19 @@ function Assignment_2B() {
                         return 0;
                     }
                 })
+
         });
+        svg.selectAll("text").remove();
+        svg.append("text")
+            .attr("text-anchor", "middle")
+            .attr("font-size", "40px")
+            .attr("font-weight", "bold")
+            .attr("fill", "black")
+            .text('Clustering with K = ' + current_clicked)
+            // Position the g element like the circle element used to be.
+            .attr('x', width / 4)
+            .attr('y', height / 10)
+
     }
 
     return returnedObject2;
