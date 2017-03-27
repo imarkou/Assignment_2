@@ -1,5 +1,5 @@
 function Assignment_2B() {
-
+    //initialize global variables
     var color_list = ['DarkRed', 'gold', 'PaleVioletRed', 'DarkOrange', 'DarkGreen', 'MidnightBlue'];
 
     var projection = d3.geo.mercator();
@@ -23,20 +23,18 @@ function Assignment_2B() {
     projection.scale(scale);
 
     projection.translate([0, 0]);
-    // check where your top left coordinate is projected
     var trans = projection([lonleft, lattop]);
-    // translate your map in the negative direction of that result
     projection.translate([-1 * trans[0], -1 * trans[1]]);
     var path = d3.geo.path()
         .projection(projection);
 
 
-//            Create SVG element
+// Create SVG element
     svg = d3.select("#assignment2BSVG")
         .append("svg")
         .attr("width", width)
         .attr("height", height);
-
+//Create the style of the map
     svg.append("rect")
         .attr("x", 0)
         .attr("y", 0)
@@ -47,10 +45,9 @@ function Assignment_2B() {
         .style("stroke-width", border);
 
     svg.append("g").attr("id", "districts");
-
-    // geojson data of SF
+// geojson data for san fransisco
     d3.json("data/sfpddistricts.geojson", function (json) {
-
+// crate the map 
         svg.selectAll("path")
             .data(json.features)
             .enter()
@@ -63,24 +60,26 @@ function Assignment_2B() {
                 'stroke-width': 1.5,
                 'stroke': 'black'
             })
+            // add a hover effect on each district
             .on('mouseover', function () {
-                // Add a hover effect
+
                 d3.select(this)
                     .transition()
                     .attr('fill', 'Coral')
             })
+            // remove the hover effect
             .on('mouseout', function () {
-                // Remove the hover effect
+
                 d3.select(this).transition()
                     .attr('fill', "PeachPuff")
             })
             .append('title')
-            // Add tool tip, containing districts
+            // add tool tip, containing districts
             .text(function (data) {
                 return data.properties.DISTRICT;
             });
 
-        // district label in center of coordinates
+        // district label - centered
         svg.select("#districts").selectAll("text")
             .data(json.features)
             .enter()
@@ -99,6 +98,7 @@ function Assignment_2B() {
     var buttons = document.getElementsByClassName("button1");
     var buttonsCount = buttons.length;
 
+// add all data points (prostitution crimes) to the map
     d3.json("data/prost_pointssosto.json", function (data) {
 
         svg.selectAll("circles")
@@ -123,7 +123,7 @@ function Assignment_2B() {
         for (var i = 0; i < buttonsCount; i += 1) {
             buttons[i].onclick = clicked(i + 2);
         }
-
+// function to color the data points when a button is clicked
         function clicked(i) {
             // alert(i);
             d3.select("#K" + i)
@@ -142,9 +142,9 @@ function Assignment_2B() {
     var returnedObject2 = {
 
         hoverover: function () {
-
+// function to color the data points when doing a hover-over of the associated button
         d3.json("data/prost_pointssosto.json", function (data) {
-
+//select button k=3
             d3.select("#K3")
                 .on("mouseover", function () {
                     centClust(3);
@@ -160,7 +160,7 @@ function Assignment_2B() {
                             return color_list[parseInt(d[current_clicked])];
                         })
                 });
-
+//select button k=2
             d3.select("#K2")
                 .on("mouseover", function () {
                     centClust(2);
@@ -176,7 +176,7 @@ function Assignment_2B() {
                             return color_list[parseInt(d[current_clicked])];
                         })
                 });
-
+//select button k=4
             d3.select("#K4")
                 .on("mouseover", function () {
                     centClust(4);
@@ -192,7 +192,7 @@ function Assignment_2B() {
                             return color_list[parseInt(d[current_clicked])];
                         })
                 });
-
+//select button k=5
             d3.select("#K5")
                 .on("mouseover", function () {
                     centClust(5);
@@ -208,6 +208,7 @@ function Assignment_2B() {
                             return color_list[parseInt(d[current_clicked])];
                         })
                 });
+//select button k=6              
 
             d3.select("#K6")
                 .on("mouseover", function () {
@@ -229,10 +230,12 @@ function Assignment_2B() {
 
     }
 
+    //function to add the clusters centers
+
     function centClust(current_clicked) {
 
         d3.json("data/clusterCenterssosto.json", function (data) {
-            // if (data[2]==current_clicked)
+
 
             svg.selectAll("#centers").remove();
             svg.selectAll("clust")
@@ -260,14 +263,15 @@ function Assignment_2B() {
                 })
 
         });
+        // add title to the map
         svg.selectAll("text").remove();
         svg.append("text")
             .attr("text-anchor", "middle")
             .attr("font-size", "40px")
             .attr("font-weight", "bold")
             .attr("fill", "black")
+            //change the title
             .text('Clustering with K = ' + current_clicked)
-            // Position the g element like the circle element used to be.
             .attr('x', width / 4)
             .attr('y', height / 10)
 
