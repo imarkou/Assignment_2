@@ -139,7 +139,10 @@ function Assignment_2B() {
         }
     });
 
-    function hoverover() {
+    var returnedObject2 = {
+
+        hoverover: function () {
+
         d3.json("data/prost_pointssosto.json", function (data) {
 
             d3.select("#K3")
@@ -224,6 +227,8 @@ function Assignment_2B() {
         })
     }
 
+    }
+
     function centClust(current_clicked) {
 
         d3.json("data/clusterCenterssosto.json", function (data) {
@@ -255,6 +260,9 @@ function Assignment_2B() {
                 })
         });
     }
+
+    return returnedObject2;
 }
 
-Assignment_2B();
+var assignment2BObject = Assignment_2B();
+console.log(assignment2BObject);
